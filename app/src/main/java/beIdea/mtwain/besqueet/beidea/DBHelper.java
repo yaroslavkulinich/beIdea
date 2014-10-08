@@ -23,6 +23,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String DATE_RAW = "date";
     public static final String TIME_RAW = "time";
     public static final String IDEA_RAW = "idea";
+    public static final String ID_RAW = "id";
 
 
     @Override
@@ -30,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sqldb = sqLiteDatabase;
         Log.d(LOG_TAG, "---onCreate DataBase---");
         sqLiteDatabase.execSQL("create table "+TABLE_NAME+" ("+
-                "id integer primary key autoincrement,"+
+                IDEA_RAW+" integer primary key autoincrement,"+
                 DATE_RAW+" text,"+
                 TIME_RAW+" text,"+
                 IDEA_RAW+" text"+");");
