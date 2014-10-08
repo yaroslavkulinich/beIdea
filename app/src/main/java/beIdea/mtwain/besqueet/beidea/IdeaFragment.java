@@ -28,6 +28,7 @@ public class IdeaFragment extends Fragment {
 
     DBHelper dbHelper;
     SQLiteDatabase sqLiteDatabase;
+    ArrayList<IdeaRaw> ideas = new ArrayList<IdeaRaw>();
 
     EditText etIdea;
 
@@ -36,7 +37,7 @@ public class IdeaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         dbHelper = new DBHelper(getActivity());
         sqLiteDatabase = dbHelper.getWritableDatabase();
-        getIdeasFromDB();
+        ideas = getIdeasFromDB();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
