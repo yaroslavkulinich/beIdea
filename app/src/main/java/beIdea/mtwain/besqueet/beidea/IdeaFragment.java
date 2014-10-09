@@ -28,8 +28,6 @@ public class IdeaFragment extends Fragment {
 
     DBHelper dbHelper;
     SQLiteDatabase sqLiteDatabase;
-    ArrayList<IdeaRaw> ideas = new ArrayList<IdeaRaw>();
-
     EditText etIdea;
 
     @Override
@@ -37,7 +35,6 @@ public class IdeaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         dbHelper = new DBHelper(getActivity());
         sqLiteDatabase = dbHelper.getWritableDatabase();
-        ideas = getIdeasFromDB();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,38 +88,5 @@ public class IdeaFragment extends Fragment {
         dbHelper.close();
     }
 
-    public ArrayList<IdeaRaw> getIdeasFromDB(){
-        Log.d(LOG_TAG, "--- Rows in mytable: ---");
-        Cursor c = sqLiteDatabase.query(dbHelper.TABLE_NAME, null, null, null, null, null, null);
 
-        ArrayList<IdeaRaw> ideaList = new ArrayList<IdeaRaw>();
-
-        if (c.moveToFirst()) {
-
-            int idIndex = c.getColumnIndex(dbHelper.ID_RAW);
-            int dateIndex = c.getColumnIndex(dbHelper.DATE_RAW);
-            int timeIndex = c.getColumnIndex(dbHelper.TIME_RAW);
-            int ideaIndex = c.getColumnIndex(dbHelper.IDEA_RAW);
-
-            Log.d(LOG_TAG,dateIndex+" "+timeIndex+" "+ideaIndex);
-
-            do {
-
-                IdeaRaw raw = new IdeaRaw();
-                raw.date = c.getString(dateIndex);
-                raw.idea = c.getString(ideaIndex);
-                raw.time = c.getString(timeIndex);
-
-                Log.d(LOG_TAG,
-                        "ID = " + c.getInt(idIndex) +
-                        ", date = " + c.getString(dateIndex) +
-                        ", time = " + c.getString(timeIndex)+
-                        ", idea = " + c.getString(ideaIndex));
-                ideaList.add(raw);
-
-            } while (c.moveToNext());
-        } else
-            Log.d(LOG_TAG, "0 rows");
-        return ideaList;
-    }
 }
