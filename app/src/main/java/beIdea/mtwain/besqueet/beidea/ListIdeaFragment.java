@@ -1,6 +1,8 @@
 package beIdea.mtwain.besqueet.beidea;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -8,9 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Created by twain on 07.10.14.
@@ -23,7 +28,7 @@ public class ListIdeaFragment extends Fragment {
     DBHelper dbHelper;
     SQLiteDatabase sqLiteDatabase;
     ArrayList<IdeaRaw> ideas = new ArrayList<IdeaRaw>();
-    ListView lvIdea;
+    StickyListHeadersListView stickyList;
     ListIdeaAdapter ideaAdapter;
 
 
@@ -38,9 +43,28 @@ public class ListIdeaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_idea, container, false);
-        lvIdea = (ListView) rootView.findViewById(R.id.lvIdea);
+        stickyList = (StickyListHeadersListView) rootView.findViewById(R.id.lvIdea);
         ideaAdapter = new ListIdeaAdapter(getActivity(),ideas);
-        lvIdea.setAdapter(ideaAdapter);
+        stickyList.setAdapter(ideaAdapter);
+        stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                adb.setTitle("Delete?");
+                adb.setMessage("Are you sure you want to delete " + position);
+                final int positionToRemove = position;
+                adb.setNegativeButton("Cancel", null);
+                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ideas.remove(positionToRemove);
+                        ideaAdapter.notifyDataSetChanged();
+                        Log.d(LOG_TAG,"IDEAS SIZE: "+ideas.size());
+                    }
+
+
+                });
+                adb.show();
+            }
+        });
         return rootView;
     }
 

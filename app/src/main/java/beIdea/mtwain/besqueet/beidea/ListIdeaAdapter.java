@@ -12,10 +12,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+
 /**
  * Created by twain on 09.10.14.
  */
-public class ListIdeaAdapter extends BaseAdapter {
+public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAdapter {
     Context ctx;
     LayoutInflater lInflater;
     ArrayList<IdeaRaw> ideas;
@@ -49,21 +51,59 @@ public class ListIdeaAdapter extends BaseAdapter {
     // пункт списка
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         // используем созданные, но не используемые view
-        View view = convertView;
-        if (view == null) {
-            view = lInflater.inflate(R.layout.idea_raw_item, parent, false);
+        IdeaRaw p = getIdeaRaw(position);
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = lInflater.inflate(R.layout.idea_raw_item, parent, false);
+            holder.idea = (TextView) convertView.findViewById(R.id.tvRawIdea);
+            holder.time = (TextView) convertView.findViewById(R.id.tvRawTime);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        IdeaRaw p = getIdeaRaw(position);
-        ((TextView) view.findViewById(R.id.tvRawIdea)).setText(p.idea);
-        ((TextView) view.findViewById(R.id.tvRawTime)).setText(p.time);
+        holder.idea.setText(p.idea);
+        holder.time.setText(p.time);
 
-        return view;
+        return convertView;
     }
 
     IdeaRaw getIdeaRaw(int position) {
         return ((IdeaRaw) getItem(position));
     }
 
+    @Override
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+        HeaderViewHolder holder;
+        if (convertView == null) {
+            holder = new HeaderViewHolder();
+            convertView = lInflater.inflate(R.layout.idea_header, parent, false);
+            holder.date = (TextView) convertView.findViewById(R.id.tvHeader);
+            convertView.setTag(holder);
+        } else {
+            holder = (HeaderViewHolder) convertView.getTag();
+        }
+        IdeaRaw p = getIdeaRaw(position);
+
+        holder.date.setText(p.date);
+        return convertView;
+
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        getIdeaRaw(position);
+      return getIdeaRaw(position).date.subSequence(0,2).toString().charAt(0);
+    }
+
+    class HeaderViewHolder {
+        TextView date;
+    }
+
+    class ViewHolder {
+        TextView idea;
+        TextView time;
+    }
 }
