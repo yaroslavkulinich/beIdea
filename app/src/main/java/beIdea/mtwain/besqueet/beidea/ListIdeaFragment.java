@@ -1,7 +1,9 @@
 package beIdea.mtwain.besqueet.beidea;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 
@@ -30,6 +38,7 @@ public class ListIdeaFragment extends Fragment {
     ArrayList<IdeaRaw> ideas = new ArrayList<IdeaRaw>();
     StickyListHeadersListView stickyList;
     ListIdeaAdapter ideaAdapter;
+    Button btn;
 
 
     @Override
@@ -38,16 +47,20 @@ public class ListIdeaFragment extends Fragment {
         dbHelper = new DBHelper(getActivity());
         sqLiteDatabase = dbHelper.getWritableDatabase();
         ideas = getIdeasFromDB();
+
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_idea, container, false);
+        btn = (Button)rootView.findViewById(R.id.btn);
         stickyList = (StickyListHeadersListView) rootView.findViewById(R.id.lvIdea);
         ideaAdapter = new ListIdeaAdapter(getActivity(),ideas);
         stickyList.setAdapter(ideaAdapter);
-        stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+        stickyList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setTitle("Delete?");
                 adb.setMessage("Are you sure you want to delete " + position);
@@ -57,14 +70,20 @@ public class ListIdeaFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         ideas.remove(positionToRemove);
                         ideaAdapter.notifyDataSetChanged();
-                        Log.d(LOG_TAG,"IDEAS SIZE: "+ideas.size());
+                        Log.d(LOG_TAG, "IDEAS SIZE: " + ideas.size());
                     }
 
 
                 });
                 adb.show();
+                return false;
             }
         });
+
+
+
+
+
         return rootView;
     }
 
@@ -102,4 +121,23 @@ public class ListIdeaFragment extends Fragment {
             Log.d(LOG_TAG, "0 rows");
         return ideaList;
     }
+
+    public void removeIdeaFromList(int id) {
+        Log.d(LOG_TAG, "--- Delete from table: ---");
+        // удаляем по id
+        int delCount = sqLiteDatabase.delete(dbHelper.TABLE_NAME, "id = " + id, null);
+        Log.d(LOG_TAG, "deleted rows count = " + delCount);
+    }
+
+    public void updateIdea(String idea,String id){
+        Log.d(LOG_TAG, "--- Update table: ---");
+        ContentValues cv = new ContentValues();
+        // подготовим значения для обновления
+        cv.put(dbHelper.IDEA_RAW, idea);
+                // обновляем по id
+        int updCount = sqLiteDatabase.update(dbHelper.TABLE_NAME, cv, "id = ?",
+                new String[] { id });
+        Log.d(LOG_TAG, "updated rows count = " + updCount);
+    }
+
 }

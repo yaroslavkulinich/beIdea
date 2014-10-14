@@ -31,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sqldb = sqLiteDatabase;
         Log.d(LOG_TAG, "---onCreate DataBase---");
         sqLiteDatabase.execSQL("create table "+TABLE_NAME+" ("+
-                IDEA_RAW+" integer primary key autoincrement,"+
+                ID_RAW+" integer primary key autoincrement,"+
                 DATE_RAW+" text,"+
                 TIME_RAW+" text,"+
                 IDEA_RAW+" text"+");");

@@ -63,6 +63,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-v13-19.0.1" level="project" />
     <orderEntry type="library" exported="" name="stickylistheaders-2.5.1" level="project" />
+    <orderEntry type="library" exported="" name="CircularFloatingActionMenu-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
     <orderEntry type="library" exported="" name="actionbarsherlock-4.4.0" level="project" />
   </component>

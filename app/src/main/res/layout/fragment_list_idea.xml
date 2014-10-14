@@ -7,6 +7,13 @@
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/lvIdea"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="New Button"
+        android:id="@+id/btn"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
