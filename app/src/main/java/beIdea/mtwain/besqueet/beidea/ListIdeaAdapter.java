@@ -1,7 +1,10 @@
 package beIdea.mtwain.besqueet.beidea;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +14,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,11 +29,13 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
     LayoutInflater lInflater;
     ArrayList<IdeaRaw> ideas;
     Button btn;
+    BeIdeaActivity a;
 
     ListIdeaAdapter(Context context, ArrayList<IdeaRaw> raws) {
         ctx = context;
+        a =(BeIdeaActivity) context;
         ideas = raws;
-        Collections.reverse(ideas);
+
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -60,7 +63,7 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         // используем созданные, но не используемые view
-        IdeaRaw p = getIdeaRaw(position);
+        final IdeaRaw p = getIdeaRaw(position);
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = lInflater.inflate(R.layout.idea_raw_item, parent, false);
@@ -70,28 +73,8 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         holder.idea.setText(p.idea);
         holder.time.setText(p.time);
-        /*FloatingActionButton actionButton = new FloatingActionButton.Builder(getActivity())
-
-                .build();*/
-
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder((Activity)ctx);
-// repeat many times:
-        ImageView itemIcon = new ImageView((Activity)ctx);
-        Activity c = (Activity)ctx;
-        itemIcon.setImageDrawable( c.getResources().getDrawable(R.drawable.ic_launcher) );
-        SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
-
-
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder((Activity)ctx)
-                .addSubActionView(button1)
-
-                        // ...
-                .attachTo(convertView)
-                .build();
-
 
         return convertView;
     }

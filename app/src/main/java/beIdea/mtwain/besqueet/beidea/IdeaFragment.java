@@ -1,6 +1,7 @@
 package beIdea.mtwain.besqueet.beidea;
 
 import android.app.Fragment;
+import android.app.backup.BackupManager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,6 +44,7 @@ public class IdeaFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_idea, container, false);
         etIdea = (EditText) rootView.findViewById(R.id.etIdea);
 
+
         return rootView;
     }
 
@@ -52,7 +54,10 @@ public class IdeaFragment extends Fragment {
         if(!idea.equals("")){
             insertIdeaToDB();
         }
+        BackupManager bm = new BackupManager(getActivity());
+        bm.dataChanged();
         super.onDestroy();
+
     }
 
     public void insertIdeaToDB(){

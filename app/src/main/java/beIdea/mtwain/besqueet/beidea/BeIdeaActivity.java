@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.backup.BackupManager;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -30,9 +31,9 @@ public class BeIdeaActivity extends Activity {
 
     ViewPager mPager;
 
-    static IdeaFragment idea_fragment;
-    static ListIdeaFragment list_idea_fragment;
 
+    IdeaFragment idea_fragment;
+    ListIdeaFragment list_idea_fragment;
 
 
     @Override
@@ -40,21 +41,24 @@ public class BeIdeaActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+        idea_fragment = new IdeaFragment();
+        list_idea_fragment = new ListIdeaFragment();
 
         // Instantiate a ViewPager and a PagerAdapter.
         mAdapter = new MyAdapter(getFragmentManager());
         mPager = (ViewPager)findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
 
-        //Instantiate fragments
-        idea_fragment = new IdeaFragment();
-        list_idea_fragment = new ListIdeaFragment();
+
+
+
+
     }
 
 
 
 
-    public static class MyAdapter extends FragmentPagerAdapter {
+    public class MyAdapter extends FragmentPagerAdapter {
         public MyAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -70,6 +74,8 @@ public class BeIdeaActivity extends Activity {
             switch (position) {
                 case 0:
                     return idea_fragment;
+
+
 
                 case 1:
                     return list_idea_fragment;
