@@ -154,19 +154,46 @@ public class ListIdeaFragment extends Fragment  {
         getActivity().getFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(rightIn, leftOut, leftIn, rightOut)
-                .replace(R.id.container, f)
-                .addToBackStack("list")
+                .add(R.id.container, f)
+                .addToBackStack(null)
                 .commit();
     }
 
 
+    public void removeIdeaFromList(String date,String time) {
+        dbHelper = new DBHelper(getActivity());
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+        int delCount = sqLiteDatabase.delete(DBHelper.TABLE_NAME, DBHelper.ID_RAW+" = " + getID(date,time), null);
+        Log.d(LOG_TAG, "deleted rows count = " + delCount);
+        refresh();
+        getFragmentManager().popBackStack();
+        dbHelper.close();
+    }
 
+    public String getID(String date,String time){
+        Log.d(LOG_TAG, "--- Rows in mytable: ---");
+        Cursor c = sqLiteDatabase.query(DBHelper.TABLE_NAME, null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+            int idIndex = c.getColumnIndex(DBHelper.ID_RAW);
+            int dateIndex = c.getColumnIndex(DBHelper.DATE_RAW);
+            int timeIndex = c.getColumnIndex(DBHelper.TIME_RAW);
+            do {
+                String s = c.getString(idIndex);
+                if(date.equals(c.getString(dateIndex))){
+                    if(time.equals(c.getString(timeIndex))){
+                        return s;
+                    }
+                }
+            } while (c.moveToNext());
+        } else
+            Log.d(LOG_TAG, "0 rows");
+        return null;
+    }
 
 
     public void refresh() {
-               ideaAdapter.ideas = getIdeasFromDB();
+            ideas = getIdeasFromDB();
+            ideaAdapter.ideas = ideas;
             ideaAdapter.notifyDataSetChanged();
-
-
     }
 }

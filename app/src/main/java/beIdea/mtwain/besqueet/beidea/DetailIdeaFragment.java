@@ -64,37 +64,11 @@ public class DetailIdeaFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btnDelete){
-           removeIdeaFromList();
-           activity.list_idea_fragment.refresh();
+           activity.list_idea_fragment.removeIdeaFromList(date,tvTime.getText()+"");
         }
     }
 
-    public void removeIdeaFromList() {
-        int delCount = sqLiteDatabase.delete(DBHelper.TABLE_NAME, DBHelper.ID_RAW+" = " + getID(date,tvTime.getText()+""), null);
-        Log.d(LOG_TAG, "deleted rows count = " + delCount);
-        dbHelper.close();
-        getFragmentManager().popBackStack();
-    }
 
-    public String getID(String date,String time){
-        Log.d(LOG_TAG, "--- Rows in mytable: ---");
-        Cursor c = sqLiteDatabase.query(DBHelper.TABLE_NAME, null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-            int idIndex = c.getColumnIndex(DBHelper.ID_RAW);
-            int dateIndex = c.getColumnIndex(DBHelper.DATE_RAW);
-            int timeIndex = c.getColumnIndex(DBHelper.TIME_RAW);
-            do {
-                String s = c.getString(idIndex);
-                if(date.equals(c.getString(dateIndex))){
-                    if(time.equals(c.getString(timeIndex))){
-                        return s;
-                    }
-                }
-            } while (c.moveToNext());
-        } else
-            Log.d(LOG_TAG, "0 rows");
-        return null;
-    }
 
 
 }
