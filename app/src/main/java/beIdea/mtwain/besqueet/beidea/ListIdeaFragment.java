@@ -57,7 +57,7 @@ public class ListIdeaFragment extends Fragment  {
         stickyList = (StickyListHeadersListView) rootView.findViewById(R.id.lvIdea);
         ideaAdapter = new ListIdeaAdapter(getActivity(),ideas);
         stickyList.setAdapter(ideaAdapter);
-        stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Bundle bundle = new Bundle();
@@ -68,7 +68,7 @@ public class ListIdeaFragment extends Fragment  {
                 detailFragment.setArguments(bundle);
                 slideDetail(detailFragment);
             }
-        });
+        });*/
         /*stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -153,7 +153,8 @@ public class ListIdeaFragment extends Fragment  {
         int leftOut = R.animator.slide_left_out;
         getActivity().getFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(rightIn, leftOut, leftIn, rightOut)
+
+                .setCustomAnimations(rightIn,0, 0, rightOut)
                 .add(R.id.container, f)
                 .addToBackStack(null)
                 .commit();

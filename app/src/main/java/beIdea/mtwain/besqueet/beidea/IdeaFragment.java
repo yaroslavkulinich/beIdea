@@ -45,6 +45,7 @@ public class IdeaFragment extends Fragment {
         etIdea = (EditText) rootView.findViewById(R.id.etIdea);
 
 
+
         return rootView;
     }
 

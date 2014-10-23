@@ -36,6 +36,7 @@ public class BeIdeaActivity extends Activity {
     ListIdeaFragment list_idea_fragment;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

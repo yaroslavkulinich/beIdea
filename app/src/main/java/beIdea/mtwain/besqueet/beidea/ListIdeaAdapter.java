@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,7 +67,44 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
         final IdeaRaw p = getIdeaRaw(position);
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = lInflater.inflate(R.layout.idea_raw_item, parent, false);
+            convertView = lInflater.inflate(R.layout.swipe_layout, parent, false);
+            SwipeLayout swipeLayout =  (SwipeLayout)convertView.findViewById(R.id.swipe);
+//set show mode.
+            swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+//set drag edge.
+            swipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
+
+            swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onClose(SwipeLayout layout) {
+                    //when the SurfaceView totally cover the BottomView.
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                    //you are swiping.
+                }
+
+                @Override
+                public void onStartOpen(SwipeLayout swipeLayout) {
+
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    //when the BottomView totally show.
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout swipeLayout) {
+
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                    //when user's hand released.
+                }
+            });
             holder.idea = (TextView) convertView.findViewById(R.id.tvRawIdea);
             holder.time = (TextView) convertView.findViewById(R.id.tvRawTime);
             convertView.setTag(holder);

@@ -4,5 +4,5 @@
     android:valueTo="1"
     android:propertyName="fractionX"
     android:valueType="floatType"
-    android:duration="200">
+    android:duration="500">
 </objectAnimator>
