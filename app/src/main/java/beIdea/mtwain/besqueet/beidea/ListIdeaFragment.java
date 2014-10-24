@@ -20,7 +20,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+
+import com.slidinglayer.SlidingLayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +35,9 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * Created by twain on 07.10.14.
  */
 public class ListIdeaFragment extends Fragment  {
+
+    private SlidingLayer slidingLayer;
+    private TextView swipeText;
 
     public ListIdeaFragment(){}
 
@@ -50,25 +57,44 @@ public class ListIdeaFragment extends Fragment  {
         ideas = getIdeasFromDB();
     }
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list_idea, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_list_idea, container, false);
 
         stickyList = (StickyListHeadersListView) rootView.findViewById(R.id.lvIdea);
         ideaAdapter = new ListIdeaAdapter(getActivity(),ideas);
+
+
+        slidingLayer = (SlidingLayer) rootView.findViewById(R.id.slidingLayer1);
+
+        slidingLayer.setShadowWidthRes(R.dimen.shadow_width);
+        slidingLayer.setOffsetWidth(25);
+        //slidingLayer.setShadowDrawable(R.drawable.sidebar_shadow);
+        slidingLayer.setStickTo(SlidingLayer.STICK_TO_LEFT);
+        slidingLayer.setCloseOnTapEnabled(false);
+
+
+
+        swipeText = (TextView) rootView.findViewById(R.id.swipeText);
         stickyList.setAdapter(ideaAdapter);
-        /*stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Bundle bundle = new Bundle();
+                Log.d("","CLICK");
+
+                slidingLayer.openLayer(true);
+                //slidingLayer.addView(new Button(this));
+                /*Bundle bundle = new Bundle();
                 bundle.putString(DBHelper.IDEA_RAW, ideas.get(i).idea);
                 bundle.putString(DBHelper.TIME_RAW, ideas.get(i).time);
                 bundle.putString(DBHelper.DATE_RAW, ideas.get(i).date);
                 DetailIdeaFragment detailFragment = new DetailIdeaFragment();
                 detailFragment.setArguments(bundle);
-                slideDetail(detailFragment);
+                slideDetail(detailFragment);*/
             }
-        });*/
+        });
         /*stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -83,6 +109,7 @@ public class ListIdeaFragment extends Fragment  {
 
         return rootView;
     }
+
 
 
     public ArrayList<IdeaRaw> getIdeasFromDB(){

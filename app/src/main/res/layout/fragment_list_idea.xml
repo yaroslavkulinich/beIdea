@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<beIdea.mtwain.besqueet.beidea.CustomLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<beIdea.mtwain.besqueet.beidea.CustomRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
@@ -8,5 +8,37 @@
         android:id="@+id/lvIdea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <com.slidinglayer.SlidingLayer
+        xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
+        android:id="@+id/slidingLayer1"
+        android:layout_width="@dimen/layer_width"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#14ad8f">
 
-</beIdea.mtwain.besqueet.beidea.CustomLinearLayout>
+            <TextView
+                android:id="@+id/swipeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:drawablePadding="15dip"
+                android:paddingBottom="80dp"
+                android:textSize="17sp"
+                android:textColor="#074035"/>
+
+            <Button
+                android:id="@+id/buttonClose"
+                style="@android:style/MediaButton.Next"
+                android:layout_marginBottom="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Click" />
+
+        </RelativeLayout>
+    </com.slidinglayer.SlidingLayer>
+
+</beIdea.mtwain.besqueet.beidea.CustomRelativeLayout>

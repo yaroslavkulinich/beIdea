@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.slidinglayer.SlidingLayer;
 
 
 public class BeIdeaActivity extends Activity {
@@ -53,8 +54,9 @@ public class BeIdeaActivity extends Activity {
 
 
 
-
     }
+
+
 
 
 
