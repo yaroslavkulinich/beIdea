@@ -28,6 +28,7 @@ dependencies {
     compile 'se.emilsjolander:stickylistheaders:2.5.1'
     compile "com.daimajia.swipelayout:library:1.1.7@aar"
     compile project('libraries:SlidingLayer')
+    compile 'com.sothree.slidinguppanel:library:+'
 
 
 
