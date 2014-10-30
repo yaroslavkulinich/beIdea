@@ -34,19 +34,19 @@ public class IdeaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new DBHelper(getActivity());
-        sqLiteDatabase = dbHelper.getWritableDatabase();
+        initDB();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_idea, container, false);
         etIdea = (EditText) rootView.findViewById(R.id.etIdea);
-
-
-
         return rootView;
+    }
+
+    public void initDB(){
+        dbHelper = new DBHelper(getActivity());
+        sqLiteDatabase = dbHelper.getWritableDatabase();
     }
 
     @Override
@@ -58,7 +58,6 @@ public class IdeaFragment extends Fragment {
         BackupManager bm = new BackupManager(getActivity());
         bm.dataChanged();
         super.onDestroy();
-
     }
 
     public void insertIdeaToDB(){
@@ -92,6 +91,8 @@ public class IdeaFragment extends Fragment {
         Log.d(LOG_TAG, "Date: "+date);
         Log.d(LOG_TAG,"Idea: "+idea);
         dbHelper.close();
+        etIdea.setText("");
+        initDB();
     }
 
 

@@ -1,44 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<beIdea.mtwain.besqueet.beidea.CustomRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
-    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-        android:id="@+id/lvIdea"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    >
+    <RelativeLayout
+        android:id="@+id/dragLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <com.slidinglayer.SlidingLayer
-        xmlns:slidingLayer="http://schemas.android.com/apk/res/com.slidinglayersample"
-        android:id="@+id/slidingLayer1"
-        android:layout_width="@dimen/layer_width"
-        android:layout_height="match_parent">
-        <RelativeLayout
+        android:layout_height="68dp"
+        android:background="#ff1008ff"
+
+        >
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#14ad8f">
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:text="Drag this view"
+            android:textSize="20sp"/>
 
-            <TextView
-                android:id="@+id/swipeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:fontFamily="sans-serif-medium"
-                android:drawablePadding="15dip"
-                android:paddingBottom="80dp"
-                android:textSize="17sp"
-                android:textColor="#074035"/>
+    </RelativeLayout>
 
-            <Button
-                android:id="@+id/buttonClose"
-                style="@android:style/MediaButton.Next"
-                android:layout_marginBottom="60dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="Click" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
 
+            android:id="@+id/lvIdea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <com.slidinglayer.SlidingLayer
+            xmlns:slidingLayer="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/slidingLayer1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/tvDetailDate"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvDetailIdea"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="23sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/tvDetailTime"
+                    android:layout_below="@+id/tvDetailDate"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+        </com.slidinglayer.SlidingLayer>
+        <com.slidinglayer.SlidingLayer
+            xmlns:slidingLayer="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/slidingLayer2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.slidinglayer.SlidingLayer>
         </RelativeLayout>
-    </com.slidinglayer.SlidingLayer>
 
-</beIdea.mtwain.besqueet.beidea.CustomRelativeLayout>
+
+</LinearLayout>

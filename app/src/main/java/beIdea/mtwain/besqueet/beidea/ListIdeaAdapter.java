@@ -5,12 +5,14 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,31 +28,27 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  * Created by twain on 09.10.14.
  */
 public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAdapter {
-    Context ctx;
+    ListIdeaFragment ctx;
     LayoutInflater lInflater;
-    ArrayList<IdeaRaw> ideas;
     Button btn;
     BeIdeaActivity a;
 
-    ListIdeaAdapter(Context context, ArrayList<IdeaRaw> raws) {
-        ctx = context;
-        a =(BeIdeaActivity) context;
-        ideas = raws;
-
-        lInflater = (LayoutInflater) ctx
+    ListIdeaAdapter(Fragment context) {
+        ctx = (ListIdeaFragment) context;
+        lInflater = (LayoutInflater) ctx.getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     // кол-во элементов
     @Override
     public int getCount() {
-        return ideas.size();
+        return ctx.ideas.size();
     }
 
     // элемент по позиции
     @Override
     public Object getItem(int position) {
-        return ideas.get(position);
+        return ctx.ideas.get(position);
     }
 
     // id по позиции
@@ -61,8 +59,10 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
 
     // пункт списка
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView( int pos, View convertView, ViewGroup parent) {
         ViewHolder holder;
+        final int position = pos;
+        ImageButton ibtnDelete,ibtnEdit;
         // используем созданные, но не используемые view
         final IdeaRaw p = getIdeaRaw(position);
         if (convertView == null) {
@@ -70,6 +70,30 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
             convertView = lInflater.inflate(R.layout.swipe_layout, parent, false);
             SwipeLayout swipeLayout =  (SwipeLayout)convertView.findViewById(R.id.swipe);
 //set show mode.
+            ibtnDelete = (ImageButton) swipeLayout.findViewById(R.id.ibtnDelete);
+            ibtnDelete.setTag(ctx.ideas.get(position).id);
+            ibtnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("1","Position "+position+", TIME "+p.time+"  ANOTHER TIME"+ctx.ideas.get(position).time);
+                    for(int i=0;i<ctx.ideas.size();i++){
+                        Log.d("1",ctx.ideas.get(i).time);
+                    }
+
+                }
+            });
+            ibtnEdit = (ImageButton) swipeLayout.findViewById(R.id.ibtnEdit);
+            ibtnEdit.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                   // Log.d("","Position "+position);
+                    /*ImageButton b = (ImageButton) view;
+
+                    ctx.removeIdeaFromList((String)b.getTag());
+*/
+                }
+            });
             swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 //set drag edge.
             swipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
@@ -105,12 +129,14 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
                     //when user's hand released.
                 }
             });
+
             holder.idea = (TextView) convertView.findViewById(R.id.tvRawIdea);
             holder.time = (TextView) convertView.findViewById(R.id.tvRawTime);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         holder.idea.setText(p.idea);
         holder.time.setText(p.time);
 
@@ -156,5 +182,6 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
     class ViewHolder {
         TextView idea;
         TextView time;
+
     }
 }

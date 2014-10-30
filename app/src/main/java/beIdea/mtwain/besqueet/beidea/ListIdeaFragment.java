@@ -37,47 +37,58 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class ListIdeaFragment extends Fragment  {
 
     private SlidingLayer slidingLayer;
-    private TextView swipeText;
 
     public ListIdeaFragment(){}
 
     public static final String LOG_TAG = "ListIdeaFragment";
     DBHelper dbHelper;
     SQLiteDatabase sqLiteDatabase;
+
     ArrayList<IdeaRaw> ideas = new ArrayList<IdeaRaw>();
     StickyListHeadersListView stickyList;
     ListIdeaAdapter ideaAdapter;
-
+    RelativeLayout dragLayout;
+    TextView tvDetailIdea,tvDetailDate,tvDetailTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new DBHelper(getActivity());
-        sqLiteDatabase = dbHelper.getWritableDatabase();
+        initDB();
         ideas = getIdeasFromDB();
     }
+    @Override
+    public void onDestroy(){
+        if(!sqLiteDatabase.isOpen())
+        dbHelper.close();
 
+        super.onDestroy();
+    }
 
+    public void initDB(){
+        dbHelper = new DBHelper(getActivity());
+        sqLiteDatabase = dbHelper.getWritableDatabase();
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_list_idea, container, false);
 
         stickyList = (StickyListHeadersListView) rootView.findViewById(R.id.lvIdea);
-        ideaAdapter = new ListIdeaAdapter(getActivity(),ideas);
-
+        ideaAdapter = new ListIdeaAdapter(this);
 
         slidingLayer = (SlidingLayer) rootView.findViewById(R.id.slidingLayer1);
+        tvDetailIdea = (TextView) slidingLayer.findViewById(R.id.tvDetailIdea);
+        tvDetailDate = (TextView) slidingLayer.findViewById(R.id.tvDetailDate);
+        tvDetailTime = (TextView) slidingLayer.findViewById(R.id.tvDetailTime);
 
         slidingLayer.setShadowWidthRes(R.dimen.shadow_width);
-        slidingLayer.setOffsetWidth(25);
-        //slidingLayer.setShadowDrawable(R.drawable.sidebar_shadow);
+        slidingLayer.setOffsetWidth(1);
+        slidingLayer.setCloseOnTapEnabled(true);
         slidingLayer.setStickTo(SlidingLayer.STICK_TO_LEFT);
-        slidingLayer.setCloseOnTapEnabled(false);
+
+        dragLayout = (RelativeLayout) rootView.findViewById(R.id.dragLayout);
 
 
-
-        swipeText = (TextView) rootView.findViewById(R.id.swipeText);
         stickyList.setAdapter(ideaAdapter);
         stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,6 +96,9 @@ public class ListIdeaFragment extends Fragment  {
                 Log.d("","CLICK");
 
                 slidingLayer.openLayer(true);
+                tvDetailIdea.setText(ideas.get(i).idea);
+                tvDetailDate.setText(ideas.get(i).date);
+                tvDetailTime.setText(ideas.get(i).time);
                 //slidingLayer.addView(new Button(this));
                 /*Bundle bundle = new Bundle();
                 bundle.putString(DBHelper.IDEA_RAW, ideas.get(i).idea);
@@ -95,22 +109,9 @@ public class ListIdeaFragment extends Fragment  {
                 slideDetail(detailFragment);*/
             }
         });
-        /*stickyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Fragment detailFragment = new DetailIdeaFragment();
-                FragmentTransaction ft  = getFragmentManager().beginTransaction();
-                ft.replace(R.id.pager, detailFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-            }
-        });*/
 
         return rootView;
     }
-
-
 
     public ArrayList<IdeaRaw> getIdeasFromDB(){
         Log.d(LOG_TAG, "--- Rows in mytable: ---");
@@ -128,8 +129,8 @@ public class ListIdeaFragment extends Fragment  {
             Log.d(LOG_TAG,dateIndex+" "+timeIndex+" "+ideaIndex);
 
             do {
-
                 IdeaRaw raw = new IdeaRaw();
+                raw.id = c.getString(idIndex);
                 raw.date = c.getString(dateIndex);
                 raw.idea = c.getString(ideaIndex);
                 raw.time = c.getString(timeIndex);
@@ -144,11 +145,10 @@ public class ListIdeaFragment extends Fragment  {
             } while (c.moveToNext());
         } else
             Log.d(LOG_TAG, "0 rows");
-        Collections.reverse(ideaList);
+        //Collections.reverse(ideaList);
+        dbHelper.close();
         return ideaList;
     }
-
-
 
     public void updateIdea(String idea,String id){
         Log.d(LOG_TAG, "--- Update table: ---");
@@ -159,47 +159,21 @@ public class ListIdeaFragment extends Fragment  {
         int updCount = sqLiteDatabase.update(dbHelper.TABLE_NAME, cv, "id = ?",
                 new String[] { id });
         Log.d(LOG_TAG, "updated rows count = " + updCount);
+        dbHelper.close();
+        initDB();
     }
 
-   /* public void slideMenu(Fragment f) {
-        int slide_in_up = R.animator.slide_in_up;
-        int slide_out_up = R.animator.slide_out_up;
-
-        getActivity().getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(slide_in_up,slide_out_up)
-                .replace(R.id.container, f)
-                .addToBackStack(null)
-                .commit();
-    }*/
-
-    public void slideDetail(Fragment f) {
-        int rightIn = R.animator.slide_right_in;
-        int rightOut = R.animator.slide_right_out;
-        int leftIn = R.animator.slide_left_in;
-        int leftOut = R.animator.slide_left_out;
-        getActivity().getFragmentManager()
-                .beginTransaction()
-
-                .setCustomAnimations(rightIn,0, 0, rightOut)
-                .add(R.id.container, f)
-                .addToBackStack(null)
-                .commit();
-    }
-
-
-    public void removeIdeaFromList(String date,String time) {
-        dbHelper = new DBHelper(getActivity());
-        sqLiteDatabase = dbHelper.getWritableDatabase();
-        int delCount = sqLiteDatabase.delete(DBHelper.TABLE_NAME, DBHelper.ID_RAW+" = " + getID(date,time), null);
+    public void removeIdeaFromList(String id) {
+        initDB();
+        int delCount = sqLiteDatabase.delete(DBHelper.TABLE_NAME, DBHelper.ID_RAW+" = " + id, null);
         Log.d(LOG_TAG, "deleted rows count = " + delCount);
         refresh();
-        getFragmentManager().popBackStack();
+        //getFragmentManager().popBackStack();
         dbHelper.close();
     }
 
     public String getID(String date,String time){
-        Log.d(LOG_TAG, "--- Rows in mytable: ---");
+
         Cursor c = sqLiteDatabase.query(DBHelper.TABLE_NAME, null, null, null, null, null, null);
         if (c.moveToFirst()) {
             int idIndex = c.getColumnIndex(DBHelper.ID_RAW);
@@ -207,21 +181,27 @@ public class ListIdeaFragment extends Fragment  {
             int timeIndex = c.getColumnIndex(DBHelper.TIME_RAW);
             do {
                 String s = c.getString(idIndex);
+                Log.d("1", "--- Remove ID: "+s);
+                Log.d("1", date+" AND "+c.getString(dateIndex));
                 if(date.equals(c.getString(dateIndex))){
+                    Log.d("1", "YES");
+                    Log.d("1", time+" AND "+c.getString(timeIndex));
                     if(time.equals(c.getString(timeIndex))){
+                        Log.d("1", "HAAA YEAH");
+                        Log.d("1",s+" deleted!!!");
                         return s;
                     }
                 }
             } while (c.moveToNext());
         } else
             Log.d(LOG_TAG, "0 rows");
+
         return null;
     }
 
 
     public void refresh() {
             ideas = getIdeasFromDB();
-            ideaAdapter.ideas = ideas;
             ideaAdapter.notifyDataSetChanged();
     }
 }

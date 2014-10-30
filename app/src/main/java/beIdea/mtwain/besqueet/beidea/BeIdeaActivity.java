@@ -12,31 +12,27 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.RelativeLayout;
 
+import com.actionbarsherlock.internal.nineoldandroids.view.animation.AnimatorProxy;
 import com.slidinglayer.SlidingLayer;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 
 public class BeIdeaActivity extends Activity {
 
     private static final String LOG_TAG = "BeIdeaActivity";
-
-    static final int NUM_ITEMS = 2;
-
-    MyAdapter mAdapter;
-
-    ViewPager mPager;
-
-
     IdeaFragment idea_fragment;
     ListIdeaFragment list_idea_fragment;
-
-
+    RelativeLayout main_container,second_container;
+    SlidingUpPanelLayout slideup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,71 +41,55 @@ public class BeIdeaActivity extends Activity {
 
         idea_fragment = new IdeaFragment();
         list_idea_fragment = new ListIdeaFragment();
+        slideup = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
-        // Instantiate a ViewPager and a PagerAdapter.
-        mAdapter = new MyAdapter(getFragmentManager());
-        mPager = (ViewPager)findViewById(R.id.pager);
-        mPager.setAdapter(mAdapter);
-
-
-
-
-    }
+        slideup.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i("", "onPanelSlide, offset " + slideOffset);
+                if (slideOffset > 0.5) {
 
 
+                } else {
+                    idea_fragment.etIdea.clearFocus();
 
+                }
+            }
 
-
-
-    public class MyAdapter extends FragmentPagerAdapter {
-        public MyAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_ITEMS;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            switch (position) {
-                case 0:
-                    return idea_fragment;
-
-
-
-                case 1:
-                    return list_idea_fragment;
+            @Override
+            public void onPanelExpanded(View panel) {
+                Log.i("", "onPanelExpanded");
 
             }
 
-            return null;
-        }
+            @Override
+            public void onPanelCollapsed(View panel) {
+                Log.i("", "onPanelCollapsed");
+                idea_fragment.etIdea.requestFocus();
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+                Log.i("", "onPanelAnchored");
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+                Log.i("", "onPanelHidden");
+            }
+        });
+
+        main_container = (RelativeLayout) findViewById(R.id.main_container);
+        second_container = (RelativeLayout) findViewById(R.id.second_container);
+
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.main_container,idea_fragment)
+                .commit();
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.second_container,list_idea_fragment)
+                .commit();
     }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
 }

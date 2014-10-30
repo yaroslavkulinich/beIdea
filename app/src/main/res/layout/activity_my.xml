@@ -4,11 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyActivity"
-    tools:ignore="MergeRootFrame" >
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager"
+    tools:ignore="MergeRootFrame"
+    >
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:panelHeight="68dp"
+        sothree:dragView="@+id/second_container"
+        sothree:paralaxOffset="68dp"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:id="@+id/main_container"
+             />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|top"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:id="@+id/second_container"
+             />
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </RelativeLayout>

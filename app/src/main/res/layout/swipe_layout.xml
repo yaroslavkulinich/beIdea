@@ -4,29 +4,33 @@
     android:layout_width="match_parent" android:layout_height="80dp"
     android:id="@+id/swipe">
     <!-- Bottom View Start-->
-    <LinearLayout
-        android:background="#e8ff1914"
-        android:id="@+id/bottom_wrapper"
-        android:layout_width="160dp"
-        android:weightSum="1"
-        android:layout_height="match_parent">
 
-        <!--What you want to show-->
-        <Button
-            style="?android:attr/buttonStyleSmall"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/list_item_wrapper"
+        android:background="#ff000000"
+        >
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="New Button"
-            android:id="@+id/button" />
+            android:id="@+id/ibtnDelete"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="@null"
+            android:layout_margin="4dp" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="New Button"
-            android:id="@+id/button2"
-            android:layout_weight="1" />
+            android:id="@+id/ibtnEdit"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_menu_edit"
+            android:background="@null"
+            android:layout_margin="4dp" />
     </LinearLayout>
+
     <!-- Bottom View End-->
 
     <!-- Surface View Start -->
