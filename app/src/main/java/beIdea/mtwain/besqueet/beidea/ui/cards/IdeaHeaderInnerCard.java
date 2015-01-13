@@ -27,7 +27,6 @@ public class IdeaHeaderInnerCard extends CardHeader {
 
         TextView tvHeader = (TextView) view.findViewById(R.id.tvHeader);
 
-
         if (tvHeader!=null){
             tvHeader.setText(header);
         }

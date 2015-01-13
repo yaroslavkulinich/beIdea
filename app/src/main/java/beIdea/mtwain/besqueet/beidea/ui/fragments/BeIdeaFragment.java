@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import beIdea.mtwain.besqueet.beidea.Constants;
 import beIdea.mtwain.besqueet.beidea.R;
 import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
+import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
 import beIdea.mtwain.besqueet.beidea.ui.Idea;
 import beIdea.mtwain.besqueet.beidea.ui.adapters.IdeaCardArrayAdapter;
 import beIdea.mtwain.besqueet.beidea.ui.adapters.ListIdeaAdapter;
@@ -35,7 +37,7 @@ import it.gmariotti.cardslib.library.view.CardListView;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class BeIdeaFragment extends Fragment implements View.OnClickListener {
+public class BeIdeaFragment extends Fragment implements Constants,View.OnClickListener {
 
     SlidingUpPanelLayout slidingUpPanelLayout;
     RelativeLayout dragLayout;
@@ -44,6 +46,9 @@ public class BeIdeaFragment extends Fragment implements View.OnClickListener {
     StickyListHeadersListView stickyList;
     ListIdeaAdapter ideaAdapter;
     TextView tvDetailIdea,tvDetailDate,tvDetailTime;
+
+    ArrayList<Integer> sectionIndexes = new ArrayList<>();
+    ArrayList<String> sectionValues = new ArrayList<>();
 
     static String title,idea = "";
     boolean state = false;
@@ -164,24 +169,15 @@ public class BeIdeaFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<Card> cards = new ArrayList<>();
         RealmResults<Idea> ideas = RealmController.getIdeas();
-        Idea idea;
-        for(int i=0; i<ideas.size(); i++){
-            idea = ideas.get(i);
-        }
 
-        BaseIdeaCard card = new BaseIdeaCard(getActivity());
-        IdeaHeaderInnerCard ideaHeaderInnerCard = new IdeaHeaderInnerCard(getActivity());
-        ideaHeaderInnerCard.setTopHeader("top header");
-        card.addCardHeader(ideaHeaderInnerCard);
-        card.text = "main content of card";
-        cards.add(card);
-        IdeaCardArrayAdapter ideaCardArrayAdapter = new IdeaCardArrayAdapter(getActivity(),cards);
         CardListView listView = (CardListView) rootView.findViewById(R.id.card_idea_list);
+        IdeaCardArrayAdapter ideaCardArrayAdapter = setSortedAdapter(ideas, SORT_DAYS);
         // Define your sections
         List<CardSection> sections =  new ArrayList<>();
-        sections.add(new CardSection(0,"Section 1"));
+        for(int i=0;i<sectionIndexes.size();i++){
+            sections.add(new CardSection(sectionIndexes.get(i),sectionValues.get(i)));
+        }
         CardSection[] dummy = new CardSection[sections.size()];
-
         //Define your Sectioned adapter
         SectionedCardAdapter mAdapter = new SectionedCardAdapter(getActivity(), ideaCardArrayAdapter);
         mAdapter.setCardSections(sections.toArray(dummy));
@@ -191,6 +187,44 @@ public class BeIdeaFragment extends Fragment implements View.OnClickListener {
         }
 
         return rootView;
+    }
+
+    public IdeaCardArrayAdapter  setSortedAdapter(RealmResults<Idea> ideas,int sortType){
+        //TODO: в цьому методі буде відбуватись сортування списку
+        ArrayList<Card> cards = new ArrayList<>();
+        ideas.sort("timeInMill",false);//TODO: додати в Constants
+        Idea idea;
+        ArrayList<String> dates = new ArrayList<>();
+        sectionIndexes = new ArrayList<>();
+        sectionValues = new ArrayList<>();
+        for(int i=0; i<ideas.size(); i++){
+            idea = ideas.get(i);
+            BaseIdeaCard card = new BaseIdeaCard(getActivity());
+            IdeaHeaderInnerCard ideaHeaderInnerCard = new IdeaHeaderInnerCard(getActivity());
+            ideaHeaderInnerCard.setTopHeader(idea.getTitle());
+            card.addCardHeader(ideaHeaderInnerCard);
+            card.text = idea.getIdea();
+            cards.add(card);
+            if(sortType== SORT_DAYS){
+                String currentIndexDate = idea.getDay()+"|"+idea.getMonth()+"|"+idea.getYear();
+                if(!dates.contains(currentIndexDate)){
+                    dates.add(currentIndexDate);
+                    sectionIndexes.add(i);
+                    if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24){
+                        sectionValues.add("Today");//TODO: додати в Strings
+                    }else if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24*2){
+                        sectionValues.add("Yesterday");//TODO: додати в Strings
+                    }else{
+                        //TODO: додати перевірку на локалі та міняти місяць з числом
+                        String[]months = StringsController.getMonths();
+                        sectionValues.add(months[idea.getMonth()]+" "+idea.getDay());
+                    }
+                }
+            }
+
+        }
+
+        return new IdeaCardArrayAdapter(getActivity(),cards);
     }
 
     @Override
@@ -217,7 +251,7 @@ public class BeIdeaFragment extends Fragment implements View.OnClickListener {
                     String idea = etIdea.getText().toString();
                     String title = etTitle.getText().toString();
 
-                    RealmController.addIdea(idea, title, month, year, day, dayOfWeek, time);
+                    RealmController.addIdea(idea, title, month, year, day, dayOfWeek, time,c.getTimeInMillis());
                     Log.d("B", "Saving: " + title + "|" + month + "|" + year + "|" + day + "|" + dayOfWeek + "|" + time);
 
                 }

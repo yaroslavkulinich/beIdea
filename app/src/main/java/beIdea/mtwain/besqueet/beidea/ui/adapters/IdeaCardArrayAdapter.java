@@ -34,8 +34,6 @@ public class IdeaCardArrayAdapter extends CardArrayAdapter  {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        BaseIdeaCard c = (BaseIdeaCard) getItem(position);
-        Log.d("B", "------------------------" + c.text);
         return super.getView(position, convertView, parent);
     }
 

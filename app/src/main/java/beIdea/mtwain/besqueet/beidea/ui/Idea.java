@@ -10,6 +10,7 @@ public class Idea extends RealmObject {
     private int year;
     private int day;
     private int dayOfWeek;
+    private long timeInMill;
 
     public String getIdea() {
         return idea;
@@ -67,5 +68,13 @@ public class Idea extends RealmObject {
 
     public void setMonth(int month) {
         this.month = month;
+    }
+
+    public long getTimeInMill() {
+        return timeInMill;
+    }
+
+    public void setTimeInMill(long timeInMill) {
+        this.timeInMill = timeInMill;
     }
 }
