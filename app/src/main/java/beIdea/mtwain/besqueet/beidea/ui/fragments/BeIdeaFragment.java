@@ -18,7 +18,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import beIdea.mtwain.besqueet.beidea.Constants;
 import beIdea.mtwain.besqueet.beidea.R;
@@ -31,9 +30,6 @@ import beIdea.mtwain.besqueet.beidea.ui.cards.BaseIdeaCard;
 import beIdea.mtwain.besqueet.beidea.ui.cards.IdeaHeaderInnerCard;
 import io.realm.RealmResults;
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.prototypes.CardSection;
-import it.gmariotti.cardslib.library.prototypes.SectionedCardAdapter;
-import it.gmariotti.cardslib.library.view.CardListView;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
@@ -170,7 +166,13 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         ArrayList<Card> cards = new ArrayList<>();
         RealmResults<Idea> ideas = RealmController.getIdeas();
 
-        CardListView listView = (CardListView) rootView.findViewById(R.id.card_idea_list);
+        StickyListHeadersListView cardListView = (StickyListHeadersListView) rootView.findViewById(R.id.card_idea_list);
+
+        ListIdeaAdapter listIdeaAdapter = new ListIdeaAdapter(getActivity());
+        cardListView.setAdapter(listIdeaAdapter);
+
+
+        /*CardListView listView = (CardListView) rootView.findViewById(R.id.card_idea_list);
         IdeaCardArrayAdapter ideaCardArrayAdapter = setSortedAdapter(ideas, SORT_DAYS);
         // Define your sections
         List<CardSection> sections =  new ArrayList<>();
@@ -184,7 +186,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
 
         if (listView!=null){
             listView.setExternalAdapter(mAdapter,ideaCardArrayAdapter);
-        }
+        }*/
 
         return rootView;
     }
