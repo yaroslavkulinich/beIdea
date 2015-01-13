@@ -1,103 +1,84 @@
-package beIdea.mtwain.besqueet.beidea;
+package beIdea.mtwain.besqueet.beidea.ui.adapters;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.daimajia.swipe.SwipeLayout;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import beIdea.mtwain.besqueet.beidea.R;
+import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
+import beIdea.mtwain.besqueet.beidea.ui.Idea;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
-/**
- * Created by twain on 09.10.14.
- */
 public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAdapter {
-    ListIdeaFragment ctx;
+   // ListIdeaFragment ctx;
     LayoutInflater lInflater;
-    Button btn;
-    BeIdeaActivity a;
 
-    ListIdeaAdapter(Fragment context) {
-        ctx = (ListIdeaFragment) context;
-        lInflater = (LayoutInflater) ctx.getActivity()
+
+    public ListIdeaAdapter(Fragment context) {
+     //   ctx = (ListIdeaFragment) context;
+        lInflater = (LayoutInflater) context.getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    // кол-во элементов
     @Override
     public int getCount() {
-        return ctx.ideas.size();
+        return RealmController.getIdeas().size();
     }
 
-    // элемент по позиции
     @Override
     public Object getItem(int position) {
-        return ctx.ideas.get(position);
+        return RealmController.getIdeas().get(position);
     }
 
-    // id по позиции
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    // пункт списка
     @Override
     public View getView( int pos, View convertView, ViewGroup parent) {
         ViewHolder holder;
         final int position = pos;
-        ImageButton ibtnDelete,ibtnEdit;
-        // используем созданные, но не используемые view
-        final IdeaRaw p = getIdeaRaw(position);
+        ImageButton btnDelete,btnEdit;
+
+        final Idea idea = getIdea(position);
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = lInflater.inflate(R.layout.swipe_layout, parent, false);
             SwipeLayout swipeLayout =  (SwipeLayout)convertView.findViewById(R.id.swipe);
-//set show mode.
-            ibtnDelete = (ImageButton) swipeLayout.findViewById(R.id.ibtnDelete);
-            ibtnDelete.setTag(ctx.ideas.get(position).id);
-            ibtnDelete.setOnClickListener(new View.OnClickListener() {
+            btnDelete = (ImageButton) swipeLayout.findViewById(R.id.ibtnDelete);
+            btnDelete.setTag(RealmController.getIdeas().get(position).getTime());
+            btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("1","Position "+position+", TIME "+p.time+"  ANOTHER TIME"+ctx.ideas.get(position).time);
-                    for(int i=0;i<ctx.ideas.size();i++){
-                        Log.d("1",ctx.ideas.get(i).time);
+                    Log.d("1","Position "+position+", TIME "+idea.getTime()+"  ANOTHER TIME"+RealmController.getIdeas().get(position).getTime());
+                    for(int i=0;i<RealmController.getIdeas().size();i++){
+                        Log.d("1",RealmController.getIdeas().get(i).getTime());
                     }
 
                 }
             });
-            ibtnEdit = (ImageButton) swipeLayout.findViewById(R.id.ibtnEdit);
-            ibtnEdit.setOnClickListener(new View.OnClickListener() {
+            btnEdit = (ImageButton) swipeLayout.findViewById(R.id.ibtnEdit);
+            btnEdit.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
                    // Log.d("","Position "+position);
                     /*ImageButton b = (ImageButton) view;
 
-                    ctx.removeIdeaFromList((String)b.getTag());
-*/
+                    ctx.removeIdeaFromList((String)b.getTag());*/
                 }
             });
             swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
-//set drag edge.
             swipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
-
             swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
                 @Override
                 public void onClose(SwipeLayout layout) {
@@ -137,14 +118,13 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.idea.setText(p.idea);
-        holder.time.setText(p.time);
-
+        holder.idea.setText(idea.getIdea());
+        holder.time.setText(idea.getTime());
         return convertView;
     }
 
-    IdeaRaw getIdeaRaw(int position) {
-        return ((IdeaRaw) getItem(position));
+    Idea getIdea(int position) {
+        return ((Idea) getItem(position));
     }
 
     @Override
@@ -158,19 +138,18 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
         } else {
             holder = (HeaderViewHolder) convertView.getTag();
         }
-        IdeaRaw p = getIdeaRaw(position);
-
-        holder.date.setText(p.date);
+        Idea idea = getIdea(position);
+        //holder.date.setText(idea.getDate());
 
         return convertView;
     }
 
     @Override
     public long getHeaderId(int position) {
-        String [] ids = getIdeaRaw(position).date.split("/");
+        //String [] ids = getIdea(position).getDate().split("/");
         String id = "";
         for(int i=0;i<3;i++){
-            id += ids[i];
+           // id += ids[i];
         }
       return Long.parseLong(id);
     }

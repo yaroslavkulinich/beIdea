@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:panelHeight="68dp"
+        sothree:dragView="@+id/second_container"
+        sothree:paralaxOffset="68dp"
+        >
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <it.gmariotti.cardslib.library.view.CardListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/card_idea_list"
+                android:background="@drawable/rounded_corners" />
+
+            <com.slidinglayer.SlidingLayer
+                android:id="@+id/slidingLayer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical" android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:id="@+id/tvDetailDate"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvDetailIdea"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:id="@+id/tvDetailTime"
+                        android:layout_below="@+id/tvDetailDate"
+                        android:layout_centerHorizontal="true" />
+                </RelativeLayout>
+
+            </com.slidinglayer.SlidingLayer>
+
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|top"
+            android:textSize="16sp"
+            android:clickable="true"
+           >
+
+            <RelativeLayout
+                android:id="@+id/dragLayout"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:background="@drawable/rounded_corner_up">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:text="Drag this view"
+                    android:textSize="20sp"/>
+                <ScrollView
+                    android:id="@+id/ScrollView01"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent">
+                </ScrollView>
+            </RelativeLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusableInTouchMode="true"
+                android:layout_below="@+id/dragLayout"
+                android:background="@drawable/rounded_idea_corner_down"
+                >
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etTitle"
+                    android:layout_gravity="center_horizontal"
+                    android:hint="Title" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textMultiLine"
+                    android:gravity="start"
+                    android:ems="10"
+                    android:id="@+id/etIdea"
+                    android:hint="Your idea" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</FrameLayout>

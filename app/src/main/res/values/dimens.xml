@@ -5,4 +5,6 @@
     <dimen name="shadow_width">0dp</dimen>
     <dimen name="layer_width">300dp</dimen>
     <dimen name="offset_width">48dp</dimen>
+    <dimen name="card_base_empty_height">30dp</dimen>
+    <dimen name="card_background_default_radius">2dip</dimen>
 </resources>
