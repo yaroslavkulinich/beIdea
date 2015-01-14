@@ -30,6 +30,12 @@ public class RealmController {
         realm.commitTransaction();
     }
 
+    public static  void deleteIdea(Idea idea){
+        realm.beginTransaction();
+        idea.removeFromRealm();
+        realm.commitTransaction();
+    }
+
     public static RealmResults<Idea> loadIdeas(){
         ideas = realm.where(Idea.class)
                 .findAll();

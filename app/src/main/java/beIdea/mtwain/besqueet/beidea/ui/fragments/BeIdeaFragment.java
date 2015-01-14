@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.slidinglayer.SlidingLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -36,6 +38,8 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class BeIdeaFragment extends Fragment implements Constants,View.OnClickListener {
 
     SlidingUpPanelLayout slidingUpPanelLayout;
+    FloatingActionsMenu actionButton;
+    FloatingActionButton btnTakePhoto,btnGetPicture;
     RelativeLayout dragLayout;
     EditText etIdea,etTitle;
     SlidingLayer slidingLayer;
@@ -75,6 +79,9 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_beidea, container, false);
+        actionButton = (FloatingActionsMenu) rootView.findViewById(R.id.actionButton);
+        btnTakePhoto = (FloatingActionButton) rootView.findViewById(R.id.takePhoto);
+        btnGetPicture = (FloatingActionButton) rootView.findViewById(R.id.getPicture);
         etIdea = (EditText) rootView.findViewById(R.id.etIdea);
         etTitle = (EditText) rootView.findViewById(R.id.etTitle);
         slidingUpPanelLayout = (SlidingUpPanelLayout) rootView.findViewById(R.id.sliding_layout);
@@ -171,22 +178,8 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         ListIdeaAdapter listIdeaAdapter = new ListIdeaAdapter(getActivity());
         cardListView.setAdapter(listIdeaAdapter);
 
-
-        /*CardListView listView = (CardListView) rootView.findViewById(R.id.card_idea_list);
-        IdeaCardArrayAdapter ideaCardArrayAdapter = setSortedAdapter(ideas, SORT_DAYS);
-        // Define your sections
-        List<CardSection> sections =  new ArrayList<>();
-        for(int i=0;i<sectionIndexes.size();i++){
-            sections.add(new CardSection(sectionIndexes.get(i),sectionValues.get(i)));
-        }
-        CardSection[] dummy = new CardSection[sections.size()];
-        //Define your Sectioned adapter
-        SectionedCardAdapter mAdapter = new SectionedCardAdapter(getActivity(), ideaCardArrayAdapter);
-        mAdapter.setCardSections(sections.toArray(dummy));
-
-        if (listView!=null){
-            listView.setExternalAdapter(mAdapter,ideaCardArrayAdapter);
-        }*/
+        btnGetPicture.setTitle("Get Picture");
+        btnTakePhoto.setTitle("Take Photo");
 
         return rootView;
     }

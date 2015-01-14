@@ -1,7 +1,6 @@
 package beIdea.mtwain.besqueet.beidea.ui.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,18 @@ import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
 import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
 import beIdea.mtwain.besqueet.beidea.ui.Idea;
 import io.realm.RealmResults;
+import me.drakeet.materialdialog.MaterialDialog;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAdapter {
 
     LayoutInflater lInflater;
     RealmResults<Idea>ideas;
+    Context context;
 
 
     public ListIdeaAdapter(Context context) {
+        this.context = context;
         lInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ideas = RealmController.getIdeas();
@@ -54,17 +56,37 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = lInflater.inflate(R.layout.idea_card_view, parent, false);
-            SwipeLayout swipeLayout =  (SwipeLayout)convertView.findViewById(R.id.swipeCard);
+            final SwipeLayout swipeLayout =  (SwipeLayout)convertView.findViewById(R.id.swipeCard);
             btnDelete = (ImageButton) swipeLayout.findViewById(R.id.ibtnDelete);
             btnDelete.setTag(RealmController.getIdeas().get(position).getTime());
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // Log.d("1","Position "+position+", TIME "+idea.getTime()+"  ANOTHER TIME"+RealmController.getIdeas().get(position).getTime());
-                    /*for(int i=0;i<RealmController.getIdeas().size();i++){
-                        Log.d("1", RealmController.getIdeas().get(i).getTime());
-                    }*/
-                    Log.d("B","Click "+position);
+
+                    final MaterialDialog mMaterialDialog = new MaterialDialog(context);
+                    mMaterialDialog.setTitle("Delete idea ?");
+                    mMaterialDialog.setMessage("Be careful! You won't be able to restore this idea.");//TODO: Change text and add to strings
+                    mMaterialDialog.setPositiveButton("DELETE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            RealmController.deleteIdea(getIdea(position));
+                            notifyDataSetChanged();
+                            swipeLayout.close();
+                            mMaterialDialog.dismiss();
+
+                        }
+                    });
+                    mMaterialDialog.setNegativeButton("CANCEL", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            swipeLayout.close();
+                            mMaterialDialog.dismiss();
+                        }
+                    });
+
+                    mMaterialDialog.show();
+
                 }
             });
             swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
