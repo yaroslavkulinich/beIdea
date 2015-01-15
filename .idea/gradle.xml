@@ -11,6 +11,9 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/libraries" />
             <option value="$PROJECT_DIR$/app/libraries/SlidingLayer" />
+            <option value="$PROJECT_DIR$/app/libs" />
+            <option value="$PROJECT_DIR$/app/libs/PhotoView-master" />
+            <option value="$PROJECT_DIR$/app/libs/PhotoView-master/library" />
           </set>
         </option>
       </GradleProjectSettings>

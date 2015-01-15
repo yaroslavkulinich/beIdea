@@ -1,6 +1,7 @@
 package beIdea.mtwain.besqueet.beidea;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 
 import com.halfbit.tinybus.Bus;
@@ -27,6 +28,14 @@ public class BeIdeaActivity extends Activity {
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.container,new BeIdeaFragment())
+                .commit();
+    }
+
+    public void presentFragment(Fragment fragment){
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.container,fragment)
+                .addToBackStack("")
                 .commit();
     }
 

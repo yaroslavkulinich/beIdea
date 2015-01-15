@@ -1,3 +1,4 @@
 include ':app'
 include ':app:libraries:SlidingLayer'
+include ':app:libs:PhotoView-master:library'
 

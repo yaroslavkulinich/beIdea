@@ -1,15 +1,22 @@
 package beIdea.mtwain.besqueet.beidea.ui.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.backup.BackupManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,26 +24,26 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.slidinglayer.SlidingLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
+import beIdea.mtwain.besqueet.beidea.BeIdeaActivity;
 import beIdea.mtwain.besqueet.beidea.Constants;
 import beIdea.mtwain.besqueet.beidea.R;
 import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
-import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
-import beIdea.mtwain.besqueet.beidea.ui.Idea;
-import beIdea.mtwain.besqueet.beidea.ui.adapters.IdeaCardArrayAdapter;
 import beIdea.mtwain.besqueet.beidea.ui.adapters.ListIdeaAdapter;
-import beIdea.mtwain.besqueet.beidea.ui.cards.BaseIdeaCard;
-import beIdea.mtwain.besqueet.beidea.ui.cards.IdeaHeaderInnerCard;
-import io.realm.RealmResults;
-import it.gmariotti.cardslib.library.internal.Card;
+import beIdea.mtwain.besqueet.beidea.utils.Utilites;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
 public class BeIdeaFragment extends Fragment implements Constants,View.OnClickListener {
 
+    LinearLayout horizontalLinearLayout;
     SlidingUpPanelLayout slidingUpPanelLayout;
     FloatingActionsMenu actionButton;
     FloatingActionButton btnTakePhoto,btnGetPicture;
@@ -47,11 +54,13 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     ListIdeaAdapter ideaAdapter;
     TextView tvDetailIdea,tvDetailDate,tvDetailTime;
 
-    ArrayList<Integer> sectionIndexes = new ArrayList<>();
-    ArrayList<String> sectionValues = new ArrayList<>();
+    private static final int SELECT_PHOTO = 1;//TODO: to constants
+    private static final int REQUEST_IMAGE_CAPTURE = 2 ;//TODO: to constants
 
-    static String title,idea = "";
+    static String title,idea,currentPicturePath = "";
     boolean state = false;
+
+    ArrayList<String>imagePaths = new ArrayList<>();
 
     public BeIdeaFragment(){}
 
@@ -79,6 +88,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_beidea, container, false);
+        horizontalLinearLayout = (LinearLayout) rootView.findViewById(R.id.horizontalLinearLayout);
         actionButton = (FloatingActionsMenu) rootView.findViewById(R.id.actionButton);
         btnTakePhoto = (FloatingActionButton) rootView.findViewById(R.id.takePhoto);
         btnGetPicture = (FloatingActionButton) rootView.findViewById(R.id.getPicture);
@@ -170,56 +180,110 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
             }
         });*/
 
-        ArrayList<Card> cards = new ArrayList<>();
-        RealmResults<Idea> ideas = RealmController.getIdeas();
-
         StickyListHeadersListView cardListView = (StickyListHeadersListView) rootView.findViewById(R.id.card_idea_list);
-
         ListIdeaAdapter listIdeaAdapter = new ListIdeaAdapter(getActivity());
         cardListView.setAdapter(listIdeaAdapter);
-
-        btnGetPicture.setTitle("Get Picture");
-        btnTakePhoto.setTitle("Take Photo");
-
+        btnGetPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imagePickerIntent = new Intent(Intent.ACTION_PICK);
+                imagePickerIntent.setType("image/*");
+                startActivityForResult(imagePickerIntent,SELECT_PHOTO);
+                actionButton.collapse();
+            }
+        });
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent makePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File image = generatePicturePath();
+                if (image != null) {
+                    makePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+                    currentPicturePath = image.getAbsolutePath();
+                }
+                startActivityForResult(makePhotoIntent, REQUEST_IMAGE_CAPTURE);
+                actionButton.collapse();
+            }
+        });
         return rootView;
     }
 
-    public IdeaCardArrayAdapter  setSortedAdapter(RealmResults<Idea> ideas,int sortType){
-        //TODO: в цьому методі буде відбуватись сортування списку
-        ArrayList<Card> cards = new ArrayList<>();
-        ideas.sort("timeInMill",false);//TODO: додати в Constants
-        Idea idea;
-        ArrayList<String> dates = new ArrayList<>();
-        sectionIndexes = new ArrayList<>();
-        sectionValues = new ArrayList<>();
-        for(int i=0; i<ideas.size(); i++){
-            idea = ideas.get(i);
-            BaseIdeaCard card = new BaseIdeaCard(getActivity());
-            IdeaHeaderInnerCard ideaHeaderInnerCard = new IdeaHeaderInnerCard(getActivity());
-            ideaHeaderInnerCard.setTopHeader(idea.getTitle());
-            card.addCardHeader(ideaHeaderInnerCard);
-            card.text = idea.getIdea();
-            cards.add(card);
-            if(sortType== SORT_DAYS){
-                String currentIndexDate = idea.getDay()+"|"+idea.getMonth()+"|"+idea.getYear();
-                if(!dates.contains(currentIndexDate)){
-                    dates.add(currentIndexDate);
-                    sectionIndexes.add(i);
-                    if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24){
-                        sectionValues.add("Today");//TODO: додати в Strings
-                    }else if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24*2){
-                        sectionValues.add("Yesterday");//TODO: додати в Strings
-                    }else{
-                        //TODO: додати перевірку на локалі та міняти місяць з числом
-                        String[]months = StringsController.getMonths();
-                        sectionValues.add(months[idea.getMonth()]+" "+idea.getDay());
+    public static File generatePicturePath() {
+        try {
+            File storageDir = getAlbumDir();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            return new File(storageDir, "IMG_" + timeStamp + ".jpg");
+        } catch (Exception ignored) {
+
+        }
+        return null;
+    }
+
+    private static File getAlbumDir() {
+        File storageDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "beIdea");//TODO:вказати потрібний шлях
+            if (storageDir != null) {
+                if (!storageDir.mkdirs()) {
+                    if (!storageDir.exists()){
+                        return null;
                     }
                 }
             }
+        }
+        return storageDir;
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case SELECT_PHOTO:
+                    Uri selectedImage = data.getData();
+                    String imagePath = Utilites.getPath(getActivity(), selectedImage);
+                    putImage(imagePath);
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    File file = new File(currentPicturePath);
+                    Boolean b = file.exists();
+                    if (b) {
+                        putImage(currentPicturePath);
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void putImage(final String path){
+
+        LayoutInflater lInflater = (LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ImageView image = (ImageView) lInflater.inflate(R.layout.photo_view, horizontalLinearLayout, false);
+        horizontalLinearLayout.addView(image);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment imageFragment = new ImageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("path",path);//TODO:add to Constants
+                imageFragment.setArguments(bundle);
+                ((BeIdeaActivity)getActivity()).presentFragment(imageFragment);
+            }
+        });
+        File file = new File(path);
+        Boolean b = file.exists();
+        if (b){
+            Picasso.with(getActivity())
+                    .load(new File(path))
+                    .resize(50, 50)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_launcher)//TODO:Додати картинку
+                    .error(R.drawable.ic_launcher)//TODO:Додати картинку помилки
+                    .into(image);
+        }else {
+            Log.d("B","File doesn't exists");
         }
 
-        return new IdeaCardArrayAdapter(getActivity(),cards);
     }
 
     @Override
@@ -248,14 +312,15 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
 
                     RealmController.addIdea(idea, title, month, year, day, dayOfWeek, time,c.getTimeInMillis());
                     Log.d("B", "Saving: " + title + "|" + month + "|" + year + "|" + day + "|" + dayOfWeek + "|" + time);
-
                 }
                 clearFields();
+                imagePaths.clear();
                 slidingUpPanelLayout.collapsePanel();
                 break;
 
             case R.id.btnCancel:
                 clearFields();
+                imagePaths.clear();
                 slidingUpPanelLayout.collapsePanel();
                 break;
         }
@@ -297,5 +362,9 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(dragLayout.getWindowToken(), 0);
     }
+
+
+
+
 
 }
