@@ -2,6 +2,7 @@ package beIdea.mtwain.besqueet.beidea;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.halfbit.tinybus.Bus;
@@ -10,7 +11,7 @@ import com.halfbit.tinybus.wires.ShakeEventWire;
 
 import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
 import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
-import beIdea.mtwain.besqueet.beidea.ui.fragments.BeIdeaFragment;
+import beIdea.mtwain.besqueet.beidea.ui.ragments.BeIdeaFragment;
 
 
 public class BeIdeaActivity extends Activity {
@@ -31,7 +32,8 @@ public class BeIdeaActivity extends Activity {
                 .commit();
     }
 
-    public void presentFragment(Fragment fragment){
+    public void presentFragment(final Fragment fragment){
+
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.container,fragment)
@@ -50,4 +52,11 @@ public class BeIdeaActivity extends Activity {
         mBus.unregister(this);
         super.onStop();
     }
+
+    //визивається при зміні орієнтації
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 }

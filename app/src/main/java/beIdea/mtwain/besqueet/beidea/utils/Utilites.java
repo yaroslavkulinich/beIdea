@@ -9,6 +9,10 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Utilites {
 
     public static String getPath(final Context context, final Uri uri) {
@@ -107,5 +111,31 @@ public class Utilites {
 
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static File generatePicturePath() {
+        try {
+            File storageDir = getAlbumDir();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            return new File(storageDir, "IMG_" + timeStamp + ".jpg");
+        } catch (Exception ignored) {
+
+        }
+        return null;
+    }
+
+    private static File getAlbumDir() {
+        File storageDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "beIdea");//TODO:вказати потрібний шлях
+            if (storageDir != null) {
+                if (!storageDir.mkdirs()) {
+                    if (!storageDir.exists()){
+                        return null;
+                    }
+                }
+            }
+        }
+        return storageDir;
     }
 }

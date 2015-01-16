@@ -1,5 +1,7 @@
 package beIdea.mtwain.besqueet.beidea.ui;
 
+import java.util.ArrayList;
+
 import io.realm.RealmObject;
 
 public class Idea extends RealmObject {
@@ -11,6 +13,7 @@ public class Idea extends RealmObject {
     private int day;
     private int dayOfWeek;
     private long timeInMill;
+    private ArrayList<String> images = new ArrayList<>();
 
     public String getIdea() {
         return idea;
@@ -76,5 +79,13 @@ public class Idea extends RealmObject {
 
     public void setTimeInMill(long timeInMill) {
         this.timeInMill = timeInMill;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
     }
 }

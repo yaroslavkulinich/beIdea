@@ -2,6 +2,8 @@ package beIdea.mtwain.besqueet.beidea.controllers;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 import beIdea.mtwain.besqueet.beidea.ui.Idea;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -16,7 +18,7 @@ public class RealmController {
         realm = Realm.getInstance(context);
     }
 
-    public static void addIdea(String idea,String title,int month,int year,int day,int dayOfWeek,String time,long timeInMill){
+    public static void addIdea(String idea,String title,int month,int year,int day,int dayOfWeek,String time,long timeInMill,ArrayList<String>images){
         realm.beginTransaction();
         Idea ideaObject = realm.createObject(Idea.class); // Create a new object
         ideaObject.setIdea(idea);
@@ -27,6 +29,7 @@ public class RealmController {
         ideaObject.setDayOfWeek(dayOfWeek);
         ideaObject.setTime(time);
         ideaObject.setTimeInMill(timeInMill);
+        ideaObject.setImages(images);
         realm.commitTransaction();
     }
 

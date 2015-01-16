@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.fragments;
+package beIdea.mtwain.besqueet.beidea.ui.ragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +26,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import beIdea.mtwain.besqueet.beidea.BeIdeaActivity;
 import beIdea.mtwain.besqueet.beidea.Constants;
@@ -196,7 +193,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
             @Override
             public void onClick(View view) {
                 Intent makePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File image = generatePicturePath();
+                File image = Utilites.generatePicturePath();
                 if (image != null) {
                     makePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
                     currentPicturePath = image.getAbsolutePath();
@@ -208,31 +205,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         return rootView;
     }
 
-    public static File generatePicturePath() {
-        try {
-            File storageDir = getAlbumDir();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            return new File(storageDir, "IMG_" + timeStamp + ".jpg");
-        } catch (Exception ignored) {
 
-        }
-        return null;
-    }
-
-    private static File getAlbumDir() {
-        File storageDir = null;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "beIdea");//TODO:вказати потрібний шлях
-            if (storageDir != null) {
-                if (!storageDir.mkdirs()) {
-                    if (!storageDir.exists()){
-                        return null;
-                    }
-                }
-            }
-        }
-        return storageDir;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -255,19 +228,33 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     }
 
     public void putImage(final String path){
-
+        if(imagePaths.contains(path)) return;
+        imagePaths.add(path);
         LayoutInflater lInflater = (LayoutInflater) getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView image = (ImageView) lInflater.inflate(R.layout.photo_view, horizontalLinearLayout, false);
-        horizontalLinearLayout.addView(image);
+
+        final View photoView = lInflater.inflate(R.layout.photo_view, horizontalLinearLayout, false);
+        ImageView image = (ImageView) photoView.findViewById(R.id.imgImage);
+        ImageView imageRemove = (ImageView) photoView.findViewById(R.id.imgRemove);
+        horizontalLinearLayout.addView(photoView);
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment imageFragment = new ImageFragment();
+                Fragment fragment = new GalleryFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("path",path);//TODO:add to Constants
-                imageFragment.setArguments(bundle);
-                ((BeIdeaActivity)getActivity()).presentFragment(imageFragment);
+                bundle.putString(BUNDLE_PATH, path);
+                bundle.putStringArrayList(BUNDLE_IMAGE_PATHS, imagePaths);
+                fragment.setArguments(bundle);
+                ((BeIdeaActivity) getActivity()).presentFragment(fragment);
+            }
+        });
+        imageRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imagePaths.remove(path);
+                photoView.setVisibility(View.GONE);
+                actionButton.setVisibility(View.VISIBLE);
             }
         });
         File file = new File(path);
@@ -283,7 +270,10 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         }else {
             Log.d("B","File doesn't exists");
         }
-
+        if(imagePaths.size()==3){
+            actionButton.setVisibility(View.INVISIBLE);
+            //TODO:додати функцію видалення - в ній зробити кнопку видимою
+        }
     }
 
     @Override
@@ -329,6 +319,8 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     public void clearFields(){
         etTitle.setText("");
         etIdea.setText("");
+        horizontalLinearLayout.removeAllViews();
+        actionButton.setVisibility(View.VISIBLE);
     }
 
     private void setDownDragLayout(){
