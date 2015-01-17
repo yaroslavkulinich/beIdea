@@ -1,9 +1,9 @@
 package beIdea.mtwain.besqueet.beidea;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import com.halfbit.tinybus.Bus;
 import com.halfbit.tinybus.TinyBus;
@@ -14,7 +14,7 @@ import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
 import beIdea.mtwain.besqueet.beidea.ui.fragments.BeIdeaFragment;
 
 
-public class BeIdeaActivity extends Activity {
+public class BeIdeaActivity extends FragmentActivity {
 
     private Bus mBus;
 
@@ -26,7 +26,7 @@ public class BeIdeaActivity extends Activity {
         RealmController.initRealm(this);
         StringsController.initStrings(this);
         RealmController.loadIdeas();
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container,new BeIdeaFragment())
                 .commit();
@@ -34,7 +34,7 @@ public class BeIdeaActivity extends Activity {
 
     public void presentFragment(final Fragment fragment){
 
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container,fragment)
                 .addToBackStack("")
