@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.ragments;
+package beIdea.mtwain.besqueet.beidea.ui.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.gson.Gson;
 import com.slidinglayer.SlidingLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
@@ -48,7 +49,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     EditText etIdea,etTitle;
     SlidingLayer slidingLayer;
     StickyListHeadersListView stickyList;
-    ListIdeaAdapter ideaAdapter;
+    ListIdeaAdapter listIdeaAdapter;
     TextView tvDetailIdea,tvDetailDate,tvDetailTime;
 
     private static final int SELECT_PHOTO = 1;//TODO: to constants
@@ -178,7 +179,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         });*/
 
         StickyListHeadersListView cardListView = (StickyListHeadersListView) rootView.findViewById(R.id.card_idea_list);
-        ListIdeaAdapter listIdeaAdapter = new ListIdeaAdapter(getActivity());
+        listIdeaAdapter = new ListIdeaAdapter(getActivity());
         cardListView.setAdapter(listIdeaAdapter);
         btnGetPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,12 +300,14 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
 
                     String idea = etIdea.getText().toString();
                     String title = etTitle.getText().toString();
-
-                    RealmController.addIdea(idea, title, month, year, day, dayOfWeek, time,c.getTimeInMillis());
+                    Gson gson = new Gson();
+                    String images = gson.toJson(imagePaths);
+                    RealmController.addIdea(idea, title, month, year, day, dayOfWeek, time,c.getTimeInMillis(),images);
                     Log.d("B", "Saving: " + title + "|" + month + "|" + year + "|" + day + "|" + dayOfWeek + "|" + time);
                 }
                 clearFields();
                 imagePaths.clear();
+                listIdeaAdapter.notifyDataSetChanged();
                 slidingUpPanelLayout.collapsePanel();
                 break;
 

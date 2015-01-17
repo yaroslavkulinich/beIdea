@@ -11,7 +11,7 @@ import com.halfbit.tinybus.wires.ShakeEventWire;
 
 import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
 import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
-import beIdea.mtwain.besqueet.beidea.ui.ragments.BeIdeaFragment;
+import beIdea.mtwain.besqueet.beidea.ui.fragments.BeIdeaFragment;
 
 
 public class BeIdeaActivity extends Activity {

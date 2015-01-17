@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.ragments;
+package beIdea.mtwain.besqueet.beidea.ui.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;

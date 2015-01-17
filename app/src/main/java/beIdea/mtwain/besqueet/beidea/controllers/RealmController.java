@@ -18,7 +18,7 @@ public class RealmController {
         realm = Realm.getInstance(context);
     }
 
-    public static void addIdea(String idea,String title,int month,int year,int day,int dayOfWeek,String time,long timeInMill,ArrayList<String>images){
+    public static void addIdea(String idea,String title,int month,int year,int day,int dayOfWeek,String time,long timeInMill,String images){
         realm.beginTransaction();
         Idea ideaObject = realm.createObject(Idea.class); // Create a new object
         ideaObject.setIdea(idea);
