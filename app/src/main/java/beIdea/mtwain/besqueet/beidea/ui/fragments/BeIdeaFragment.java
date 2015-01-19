@@ -192,7 +192,6 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
             @Override
             public void onClick(View view) {
                 saveDetail();
-
             }
         });
 
@@ -452,12 +451,15 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         }
         if(!editingEnable){
             add_detail_image.setVisibility(View.GONE);
+        }else{
+            add_detail_image.setVisibility(View.VISIBLE);
         }
 
     }
 
 
     public void editDetail(){
+
         if(!editingEnable){
             editingEnable = true;
             etDetailIdea.setEnabled(true);
