@@ -15,5 +15,5 @@
         android:id="@+id/imgRemove"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/abs__ic_clear_normal" />
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
 </RelativeLayout>

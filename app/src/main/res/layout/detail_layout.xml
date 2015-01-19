@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/holo_blue_light"
+        android:id="@+id/title_relative">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/tvDetailTitle"
+            android:layout_centerInParent="true"
+            android:text="Title"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:background="@drawable/edittext_drawable"
+            android:enabled="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/idea_relative"
+        android:layout_below="@+id/title_relative"
+        android:layout_above="@+id/bottom_relative">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tvDetailIdea"
+            android:gravity="top|left"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="16dp"
+            android:enabled="false"
+            android:background="@drawable/edittext_drawable"
+            android:textColor="@android:color/black"
+            android:inputType="textMultiLine" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_relative"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:id="@+id/detail_image_container"
+            android:orientation="horizontal"
+
+            android:layout_weight="1">
+        </LinearLayout>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@android:drawable/ic_input_add"
+            android:id="@+id/add_image" />
+    </LinearLayout>
+
+
+
+
+    <com.slidinglayer.SlidingLayer
+        android:id="@+id/saveButtonLayer"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editIdea"
+        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@+id/editIdea"
+        android:layout_alignStart="@+id/editIdea"
+        android:layout_alignParentBottom="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveIdea"
+                fab:fab_icon="@drawable/ic_action_save"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                fab:fab_colorNormal="#ffffff"
+                fab:fab_colorPressed="#c2a9b8af"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+
+
+    </com.slidinglayer.SlidingLayer>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editIdea"
+        fab:fab_icon="@drawable/ic_action_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_colorNormal="#ffffff"
+        fab:fab_colorPressed="#c2a9b8af"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

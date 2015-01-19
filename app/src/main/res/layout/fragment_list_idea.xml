@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Small Text"
-                        android:id="@+id/tvDetailTime"
+                        android:id="@+id/tvDetailTitle"
                         android:layout_below="@+id/tvDetailDate"
                         android:layout_centerHorizontal="true" />
                 </RelativeLayout>
