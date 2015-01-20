@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea;
+package org.besqueet.mtwain.beidea;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

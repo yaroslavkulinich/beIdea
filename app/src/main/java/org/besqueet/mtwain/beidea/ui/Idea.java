@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui;
+package org.besqueet.mtwain.beidea.ui;
 
 import io.realm.RealmObject;
 

@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.adapters;
+package org.besqueet.mtwain.beidea.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
 
-import beIdea.mtwain.besqueet.beidea.R;
-import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
-import beIdea.mtwain.besqueet.beidea.controllers.StringsController;
-import beIdea.mtwain.besqueet.beidea.ui.Idea;
+import org.besqueet.mtwain.beidea.R;
+import org.besqueet.mtwain.beidea.controllers.RealmController;
+import org.besqueet.mtwain.beidea.controllers.StringsController;
+import org.besqueet.mtwain.beidea.ui.Idea;
 import io.realm.RealmResults;
 import me.drakeet.materialdialog.MaterialDialog;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;

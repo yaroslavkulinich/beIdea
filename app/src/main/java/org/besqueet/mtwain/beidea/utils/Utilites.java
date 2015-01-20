@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.utils;
+package org.besqueet.mtwain.beidea.utils;
 
 import android.content.ContentUris;
 import android.content.Context;

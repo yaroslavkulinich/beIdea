@@ -1,8 +1,8 @@
-package beIdea.mtwain.besqueet.beidea.controllers;
+package org.besqueet.mtwain.beidea.controllers;
 
 import android.content.Context;
 import android.content.res.Resources;
-import beIdea.mtwain.besqueet.beidea.R;
+import org.besqueet.mtwain.beidea.R;
 
 public class StringsController {
 

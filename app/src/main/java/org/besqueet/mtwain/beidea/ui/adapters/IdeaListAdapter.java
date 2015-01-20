@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.adapters;
+package org.besqueet.mtwain.beidea.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
-import beIdea.mtwain.besqueet.beidea.ui.Idea;
+import org.besqueet.mtwain.beidea.controllers.RealmController;
+import org.besqueet.mtwain.beidea.ui.Idea;
 import io.realm.RealmResults;
 
 /**

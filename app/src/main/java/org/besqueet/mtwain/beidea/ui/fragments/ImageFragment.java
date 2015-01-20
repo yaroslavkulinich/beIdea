@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.fragments;
+package org.besqueet.mtwain.beidea.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +11,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-import beIdea.mtwain.besqueet.beidea.Constants;
-import beIdea.mtwain.besqueet.beidea.R;
+import org.besqueet.mtwain.beidea.Constants;
+import org.besqueet.mtwain.beidea.R;
 import uk.co.senab.photoview.PhotoView;
 
 public class ImageFragment extends Fragment implements Constants {

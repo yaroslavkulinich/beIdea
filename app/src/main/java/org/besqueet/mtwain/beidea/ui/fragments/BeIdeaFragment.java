@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.fragments;
+package org.besqueet.mtwain.beidea.ui.fragments;
 
 import android.app.Activity;
 import android.app.backup.BackupManager;
@@ -31,18 +31,19 @@ import com.slidinglayer.SlidingLayer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
+import org.besqueet.mtwain.beidea.BeIdeaActivity;
+import org.besqueet.mtwain.beidea.Constants;
+import org.besqueet.mtwain.beidea.controllers.RealmController;
+import org.besqueet.mtwain.beidea.ui.Idea;
+import org.besqueet.mtwain.beidea.ui.adapters.ListIdeaAdapter;
+import org.besqueet.mtwain.beidea.utils.Utilites;
+
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import beIdea.mtwain.besqueet.beidea.BeIdeaActivity;
-import beIdea.mtwain.besqueet.beidea.Constants;
-import beIdea.mtwain.besqueet.beidea.R;
-import beIdea.mtwain.besqueet.beidea.controllers.RealmController;
-import beIdea.mtwain.besqueet.beidea.ui.Idea;
-import beIdea.mtwain.besqueet.beidea.ui.adapters.ListIdeaAdapter;
-import beIdea.mtwain.besqueet.beidea.utils.Utilites;
+import org.besqueet.mtwain.beidea.R;
 import io.realm.Realm;
 import me.drakeet.materialdialog.MaterialDialog;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -114,7 +115,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                Log.i("", "onPanelSlide, offset " + slideOffset);
+               // Log.i("", "onPanelSlide, offset " + slideOffset);
                 if(!state){
                     if(slideOffset > 0.8){
                         setUpDragLayout();
@@ -129,7 +130,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
             }
             @Override
             public void onPanelExpanded(View panel) {
-                Log.i("", "onPanelExpanded");
+                //Log.i("", "onPanelExpanded");
                 etIdea.requestFocus();
             }
             @Override
@@ -138,12 +139,12 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
             }
             @Override
             public void onPanelAnchored(View panel) {
-                Log.i("", "onPanelAnchored");
+                /*Log.i("", "onPanelAnchored");*/
             }
 
             @Override
             public void onPanelHidden(View panel) {
-                Log.i("", "onPanelHidden");
+                /*Log.i("", "onPanelHidden");*/
             }
         });
 
@@ -522,6 +523,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
                     String images = gson.toJson(imagePaths);
                     RealmController.addIdea(idea, title, month, year, day, dayOfWeek, time,c.getTimeInMillis(),images);
                     Log.d("B", "Saving: " + title + "|" + month + "|" + year + "|" + day + "|" + dayOfWeek + "|" + time);
+                    ((BeIdeaActivity)getActivity()).requestBackup();
                 }
                 clearFields();
                 imagePaths.clear();

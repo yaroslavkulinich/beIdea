@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.fragments;
+package org.besqueet.mtwain.beidea.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import beIdea.mtwain.besqueet.beidea.Constants;
-import beIdea.mtwain.besqueet.beidea.R;
-import beIdea.mtwain.besqueet.beidea.ui.view.HackyViewPager;
+import org.besqueet.mtwain.beidea.Constants;
+import org.besqueet.mtwain.beidea.R;
+import org.besqueet.mtwain.beidea.ui.view.HackyViewPager;
 
 
 public class GalleryFragment extends Fragment implements Constants {

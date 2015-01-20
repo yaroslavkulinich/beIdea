@@ -1,10 +1,8 @@
-package beIdea.mtwain.besqueet.beidea.controllers;
+package org.besqueet.mtwain.beidea.controllers;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-
-import beIdea.mtwain.besqueet.beidea.ui.Idea;
+import org.besqueet.mtwain.beidea.ui.Idea;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -32,6 +30,12 @@ public class RealmController {
         ideaObject.setImages(images);
         realm.commitTransaction();
     }
+
+    public static String getPath(Context context){
+        Realm newRealm = Realm.getInstance(context);
+        return newRealm.getPath();
+    }
+
 
     public static  void deleteIdea(Idea idea){
         realm.beginTransaction();

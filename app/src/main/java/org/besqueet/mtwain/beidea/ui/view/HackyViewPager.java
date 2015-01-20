@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea.ui.view;
+package org.besqueet.mtwain.beidea.ui.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;

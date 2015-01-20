@@ -1,4 +1,4 @@
-package beIdea.mtwain.besqueet.beidea;
+package org.besqueet.mtwain.beidea;
 
 /**
  * Created by mtwain on 22.12.14.
@@ -9,4 +9,7 @@ public interface Constants {
 
     public final String BUNDLE_IMAGE_PATHS = "image_paths";
     public final String BUNDLE_PATH = "image_path";
+
+    static final String FILES_BACKUP_KEY = "realm_db";
+
 }
