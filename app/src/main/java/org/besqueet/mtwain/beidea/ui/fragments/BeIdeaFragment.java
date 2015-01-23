@@ -379,11 +379,7 @@ public class BeIdeaFragment extends Fragment implements Constants,View.OnClickLi
     public void showSaveDetailButton(boolean show){
         if(show){
             saveButtonLayer.openLayer(true);
-            Drawable icon = getResources().getDrawable(R.drawable.ic_action_close);
-            btnEditIdea.setIconDrawable(icon);
         }else{
-            Drawable icon = getResources().getDrawable(R.drawable.ic_action_edit);
-            btnEditIdea.setIconDrawable(icon);
             saveButtonLayer.closeLayer(true);
         }
 

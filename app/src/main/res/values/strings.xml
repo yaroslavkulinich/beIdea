@@ -18,5 +18,9 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    <string name="first_intro_text">My first intro text</string>
+    <string name="second_intro_text">My second intro text</string>
+    <string name="third_intro_text">My third intro text</string>
+    <string name="btn_skip_text">SKIP</string>
 
 </resources>

@@ -2,6 +2,8 @@ package org.besqueet.mtwain.beidea;
 
 import android.app.backup.BackupManager;
 import android.app.backup.RestoreObserver;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,16 +17,24 @@ import com.halfbit.tinybus.wires.ShakeEventWire;
 import org.besqueet.mtwain.beidea.controllers.RealmController;
 import org.besqueet.mtwain.beidea.controllers.StringsController;
 import org.besqueet.mtwain.beidea.ui.fragments.BeIdeaFragment;
+import org.besqueet.mtwain.beidea.ui.fragments.IntroFragment;
 
 
 public class BeIdeaActivity extends FragmentActivity {
 
     private Bus mBus;
+    public static final String APP_PREFERENCES = "mysettings";
+    public static final String APP_PREFERENCES_COUNTER = "false";
+    SharedPreferences mSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("B", "ONCREATE   "+ RealmController.getPath(getApplicationContext()));
         setContentView(R.layout.activity_layout);
+
+
+
         mBus = TinyBus.from(this).wire(new ShakeEventWire());
         RealmController.initRealm(this);
         StringsController.initStrings(this);
@@ -33,6 +43,21 @@ public class BeIdeaActivity extends FragmentActivity {
                 .beginTransaction()
                 .add(R.id.container,new BeIdeaFragment())
                 .commit();
+
+        mSettings = getSharedPreferences(APP_PREFERENCES, 0);
+        Boolean bool = mSettings.getBoolean(APP_PREFERENCES_COUNTER, true);
+        if(bool.equals(true)){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, new IntroFragment())
+                    .commit();
+            mSettings = getSharedPreferences(APP_PREFERENCES, 0);
+
+            SharedPreferences.Editor editor = mSettings.edit();
+            editor.putBoolean(APP_PREFERENCES_COUNTER, false);
+            editor.apply();
+        }
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     public void presentFragment(final Fragment fragment){
