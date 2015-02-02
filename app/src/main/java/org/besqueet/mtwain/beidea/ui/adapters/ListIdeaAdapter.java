@@ -14,6 +14,9 @@ import org.besqueet.mtwain.beidea.R;
 import org.besqueet.mtwain.beidea.controllers.RealmController;
 import org.besqueet.mtwain.beidea.controllers.StringsController;
 import org.besqueet.mtwain.beidea.ui.Idea;
+
+import java.util.Calendar;
+
 import io.realm.RealmResults;
 import me.drakeet.materialdialog.MaterialDialog;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -144,16 +147,68 @@ public class ListIdeaAdapter extends BaseAdapter implements StickyListHeadersAda
             holder = (HeaderViewHolder) convertView.getTag();
         }
         Idea idea = getIdea(position);
-        if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24){
+        /*if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24){
             holder.date.setText("Today");//TODO: додати в Strings
         }else if((System.currentTimeMillis() - idea.getTimeInMill())<60000*60*24*2){
-            holder.date.setText(idea.getTime());//TODO: додати в Strings
+            holder.date.setText("Yesterday");//TODO: додати в Strings
         }else{
             //TODO: додати перевірку на локалі та міняти місяць з числом
             String[]months = StringsController.getMonths();
             holder.date.setText(months[idea.getMonth()]+" "+idea.getDay());
-        }
+        }*/
+        /*Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        if ((today.monthDay - idea.getDay() == 0)){
+            holder.date.setText("Today");
+        }else{
+            if ((today.monthDay - idea.getDay() == 1)){
+                holder.date.setText("Yesterday");
+            }else{
+                if ((today.monthDay - idea.getDay() > 1)){
+                    String[]months = StringsController.getMonths();
+                    holder.date.setText(months[idea.getMonth()]+" "+idea.getDay());
+                }else{
+                    if ((today.monthDay - idea.getDay() < 0)){
+                        String[]months = StringsController.getMonths();
+                        holder.date.setText(months[idea.getMonth()]+" "+idea.getDay());
+                    }
+                }
+            }
+        }*/
 
+        long currentTime = System.currentTimeMillis();
+        long ideaTime = idea.getTimeInMill();
+
+        Calendar calendarCurrentTime = Calendar.getInstance();
+        Calendar calendarIdeaTime = Calendar.getInstance();
+
+        calendarCurrentTime.setTimeInMillis(currentTime);
+        calendarIdeaTime.setTimeInMillis(ideaTime);
+
+        String currentDate = calendarCurrentTime.get(Calendar.DAY_OF_MONTH) + ":" + calendarCurrentTime.get(Calendar.MONTH) + ":" + calendarCurrentTime.get(Calendar.YEAR);
+        String ideaDate = calendarIdeaTime.get(Calendar.DAY_OF_MONTH) + ":" + calendarIdeaTime.get(Calendar.MONTH) + ":" + calendarIdeaTime.get(Calendar.YEAR);
+        if (currentDate.equals(ideaDate)){
+            holder.date.setText("Today");
+        }else{
+            Calendar calendarDifference = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
+
+            long calendarTimeInMillis = calendar.getTimeInMillis();//23:59:59
+            long ideaTime2 = idea.getTimeInMill();//idea time
+            //long it3 = calendarCurrentTime.getTimeInMillis();//current time
+
+            long differenceOfTime = calendarTimeInMillis-ideaTime2;
+            calendarDifference.setTimeInMillis(differenceOfTime);
+            if((differenceOfTime<60000*60*24*2)&&(differenceOfTime>0)){
+                holder.date.setText("Yesterday");
+            }else{
+                    String[]months = StringsController.getMonths();
+                    holder.date.setText(months[idea.getMonth()]+" "+idea.getDay());
+            }
+        }
         return convertView;
     }
 
